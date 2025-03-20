@@ -12,7 +12,6 @@ module.exports = function (sequelize, DataTypes) {
       categoryId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        unique: 'fk_Courses_Categories_2',
         validate: {
           notNull: { msg: '分类ID必须填写。' },
           notEmpty: { msg: '分类ID不能为空。' },
@@ -27,7 +26,6 @@ module.exports = function (sequelize, DataTypes) {
       userId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        unique: 'fk_Courses_Users_1',
         validate: {
           notNull: { msg: '用户ID必须填写。' },
           notEmpty: { msg: '用户ID不能为空。' },
@@ -99,33 +97,15 @@ module.exports = function (sequelize, DataTypes) {
           unique: true,
           using: 'BTREE',
           fields: [{ name: 'id' }]
-        },
-        {
-          name: 'categoryId',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'categoryId' }]
-        },
-        {
-          name: 'userId',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'userId' }]
-        },
-        {
-          name: 'id',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'id' }]
         }
       ]
     }
   )
   Courses.associate = function () {
-    sequelize.models.Courses.belongsTo(sequelize.models.Categories, {
+    Courses.belongsTo(sequelize.models.Categories, {
       as: 'category'
     })
-    sequelize.models.Courses.belongsTo(sequelize.models.Users, {
+    Courses.belongsTo(sequelize.models.Users, {
       as: 'user'
     })
   }

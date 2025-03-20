@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define(
+  const Chapters = sequelize.define(
     'Chapters',
     {
       id: {
@@ -12,7 +12,6 @@ module.exports = function (sequelize, DataTypes) {
       courseId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        unique: 'fk_Chapters_Courses_1',
         validate: {
           notNull: { msg: '课程ID必须填写。' },
           notEmpty: { msg: '课程ID不能为空。' },
@@ -29,8 +28,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         validate: {
           notNull: { msg: '标题必须填写。' },
-          notEmpty: { msg: '标题不能为空。' },
-          len: { args: [2, 45], msg: '标题长度必须是2 ~ 45之间。' }
+          notEmpty: { msg: '标题不能为空。' }
         }
       },
       content: {
@@ -67,14 +65,14 @@ module.exports = function (sequelize, DataTypes) {
           unique: true,
           using: 'BTREE',
           fields: [{ name: 'id' }]
-        },
-        {
-          name: 'courseId',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'courseId' }]
         }
       ]
     }
   )
+  Chapters.associate = function () {
+    Chapters.belongsTo(sequelize.models.Courses, {
+      as: 'course'
+    })
+  }
+  return Chapters
 }

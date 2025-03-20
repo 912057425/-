@@ -34,10 +34,7 @@ async function getChapter(req) {
         as: 'course',
         attributes: ['id', 'name']
       }
-    ],
-    attributes: {
-      // exclude: ['CategoryId']
-    }
+    ]
   }
   // 查询当前章节
   const article = await Chapters.findByPk(id, conditions)
@@ -123,41 +120,27 @@ router.get('/', async function (req, res, next) {
       offset,
       include: [
         {
-          model: Categories,
-          as: 'category',
+          model: Courses,
+          as: 'course',
           attributes: ['id', 'name']
-        },
-        {
-          model: Users,
-          as: 'user',
-          attributes: ['id', 'username']
         }
-      ],
-      attributes: {
-        exclude: ['CategoryId', 'UserId']
-      }
+      ]
     }
-    if (query.name) {
+    if (query.title) {
       conditions.where = {
-        name: {
-          [Op.like]: `%${query.name}%`
+        title: {
+          [Op.like]: `%${query.title}%`
         }
       }
     }
-    if (query.categoryId) {
+    if (query.courseId) {
       conditions.where = {
-        categoryId: {
-          [Op.eq]: query.categoryId
+        courseId: {
+          [Op.eq]: query.courseId
         }
       }
     }
-    if (query.userId) {
-      conditions.where = {
-        userId: {
-          [Op.eq]: query.userId
-        }
-      }
-    }
+
     let { rows: data, count } = await Chapters.findAndCountAll(conditions)
 
     if (data) {

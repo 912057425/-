@@ -1,7 +1,7 @@
 // 课程接口-----
 var express = require('express')
 var router = express.Router()
-const { Courses, Categories, Users } = require('../../models')
+const { Courses, Categories, Users, Chapters } = require('../../models')
 const { Op } = require('sequelize')
 
 const { NotFoundError, success, failure } = require('../../utils/response')
@@ -70,6 +70,16 @@ router.post('/', async function (req, res, next) {
 /* 删除 */
 router.delete('/:id', async function (req, res, next) {
   try {
+    let findOneData = await Chapters.findOne({
+      where: {
+        courseId: req.params.id
+      }
+    })
+    if (findOneData) {
+      //如果当前课程下有章节，就提示
+      throw new Error('当前课程下有章节，无法删除。')
+    }
+
     let data = await getCourse(req)
     if (data) {
       await data.destroy()

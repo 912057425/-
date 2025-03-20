@@ -53,12 +53,6 @@ module.exports = function (sequelize, DataTypes) {
           unique: true,
           using: 'BTREE',
           fields: [{ name: 'id' }]
-        },
-        {
-          name: 'id',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'id' }]
         }
       ]
     }
