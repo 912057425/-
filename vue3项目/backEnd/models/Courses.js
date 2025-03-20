@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define(
+  const Courses = sequelize.define(
     'Courses',
     {
       id: {
@@ -12,10 +12,7 @@ module.exports = function (sequelize, DataTypes) {
       categoryId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'Categories',
-          key: 'id'
-        },
+
         unique: 'fk_Courses_Categories_2',
         validate: {
           notNull: { msg: '分类ID必须填写。' },
@@ -31,10 +28,6 @@ module.exports = function (sequelize, DataTypes) {
       userId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
         unique: 'fk_Courses_Users_1',
         validate: {
           notNull: { msg: '用户ID必须填写。' },
@@ -58,16 +51,12 @@ module.exports = function (sequelize, DataTypes) {
       },
       image: {
         type: DataTypes.STRING(255),
-        allowNull: true,
-        validate: {
-          isUrl: { msg: '图片地址不正确。' }
-        }
+        allowNull: true
       },
       recommended: {
         type: DataTypes.TINYINT,
         allowNull: true,
         defaultValue: 0,
-        unique: 'recommended',
         validate: {
           isIn: {
             args: [[0, 1]],
@@ -79,7 +68,6 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TINYINT,
         allowNull: true,
         defaultValue: 0,
-        unique: 'introductory',
         validate: {
           isIn: {
             args: [[0, 1]],
@@ -130,20 +118,18 @@ module.exports = function (sequelize, DataTypes) {
           unique: true,
           using: 'BTREE',
           fields: [{ name: 'id' }]
-        },
-        {
-          name: 'recommended',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'recommended' }]
-        },
-        {
-          name: 'introductory',
-          unique: true,
-          using: 'BTREE',
-          fields: [{ name: 'introductory' }]
         }
       ]
     }
   )
+  Courses.associate = function () {
+    sequelize.models.Courses.belongsTo(sequelize.models.Categories, {
+      as: 'category'
+    })
+    sequelize.models.Courses.belongsTo(sequelize.models.Users, {
+      as: 'user'
+    })
+  }
+
+  return Courses
 }

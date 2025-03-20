@@ -2,7 +2,7 @@
 
 var express = require('express')
 var router = express.Router()
-const { Categories } = require('../../models')
+const { Categories, Courses } = require('../../models')
 const { Op } = require('sequelize')
 
 const { NotFoundError, success, failure } = require('../../utils/response')
@@ -48,6 +48,16 @@ router.post('/', async function (req, res, next) {
 /* 删除 */
 router.delete('/:id', async function (req, res, next) {
   try {
+    let findOne = await Courses.findOne({
+      where: {
+        categoryId: req.params.id
+      }
+    })
+    if (findOne) {
+      //如果当前分类下有课程，就提示
+      throw new Error('当前分类有课程，无法删除。')
+    }
+
     let data = await getCategorie(req)
     if (data) {
       await data.destroy()
