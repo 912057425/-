@@ -12,7 +12,6 @@ module.exports = function (sequelize, DataTypes) {
       categoryId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-
         unique: 'fk_Courses_Categories_2',
         validate: {
           notNull: { msg: '分类ID必须填写。' },
