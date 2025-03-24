@@ -49,6 +49,35 @@ async function getChapter(req) {
 
 /* 新增 */
 router.post('/', async function (req, res, next) {
+  //新增之前，先查询新增的章节，是否在对应的课程下，有了相同的rank
+  const { courseId, rank } = req.body
+
+  const existingChapter = await Chapters.findOne({
+    where: {
+      courseId: {
+        [Op.eq]: courseId
+      },
+      rank: {
+        [Op.eq]: rank
+      }
+    },
+    include: [
+      {
+        model: Courses,
+        as: 'course',
+        attributes: ['id', 'name']
+      }
+    ]
+  })
+  if (existingChapter) {
+    const courseName = existingChapter.course.name
+    return failure(
+      res,
+      new Error(
+        `在课程 为 ${courseName} 的课程下，已经存在 rank 为 ${rank} 的章节。`
+      )
+    )
+  }
   try {
     let body = filterBody(req)
     let data = await Chapters.create(body)
