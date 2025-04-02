@@ -79,13 +79,11 @@ router.post('/sign_in', async function (req, res, next) {
           expiresIn: '30d'
         }
       )
-      console.log(data, 'data')
       success(res, '登录成功', {
         token
       })
     }
   } catch (error) {
-    console.log('catch', error)
     failure(res, error)
   }
 })

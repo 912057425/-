@@ -3,6 +3,7 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 
+const adminAuth = require('./middlewares/admin-auth')
 require('dotenv').config()
 
 var indexRouter = require('./routes/index')
@@ -23,12 +24,12 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
-app.use('/admin/articles', articlesRouter)
-app.use('/admin/categories', categoriesRouter)
-app.use('/admin/settings', settingsRouter)
-app.use('/admin/users', usersRouter)
-app.use('/admin/courses', coursesRouter)
-app.use('/admin/chapters', chaptersRouter)
+app.use('/admin/articles', adminAuth, articlesRouter)
+app.use('/admin/categories', adminAuth, categoriesRouter)
+app.use('/admin/settings', adminAuth, settingsRouter)
+app.use('/admin/users', adminAuth, usersRouter)
+app.use('/admin/courses', adminAuth, coursesRouter)
+app.use('/admin/chapters', adminAuth, chaptersRouter)
 app.use('/admin/auth', authRouter)
 
 module.exports = app

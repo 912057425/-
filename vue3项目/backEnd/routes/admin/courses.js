@@ -15,7 +15,7 @@ const { NotFoundError } = require('../../utils/errors')
 function filterBody(req) {
   return {
     categoryId: req.body.categoryId,
-    userId: req.body.userId,
+    // userId: req.body.userId,
     name: req.body.name,
     image: req.body.image,
     recommended: req.body.recommended,
@@ -62,6 +62,11 @@ async function getCourse(req) {
 router.post('/', async function (req, res, next) {
   try {
     let body = filterBody(req)
+
+    body.userId = req.user.id
+
+    console.log(body, 'body')
+
     let data = await Courses.create(body)
     success(res, '新增课程成功', data)
   } catch (error) {

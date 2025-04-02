@@ -23,7 +23,6 @@ function filterBody(req) {
 async function getSetting() {
   // 查询
   const article = await Settings.findOne()
-  console.log('article', article)
   // 如果没有找到，就抛出异常
   if (!article) {
     throw new NotFoundError(`ID: 设置未找到。`)

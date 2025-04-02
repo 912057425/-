@@ -3,7 +3,6 @@
  */
 class BadRequestError extends Error {
   constructor(message) {
-    console.log('object', message)
     super(message)
     this.name = 'BadRequestError'
   }
