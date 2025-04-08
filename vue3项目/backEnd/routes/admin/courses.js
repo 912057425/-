@@ -15,7 +15,6 @@ const { NotFoundError } = require('../../utils/errors')
 function filterBody(req) {
   return {
     categoryId: req.body.categoryId,
-    // userId: req.body.userId,
     name: req.body.name,
     image: req.body.image,
     recommended: req.body.recommended,
