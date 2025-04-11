@@ -3,8 +3,20 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { fileURLToPath, URL } from 'node:url'
 
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    AutoImport({
+      resolvers: [ElementPlusResolver()]
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()]
+    })
+  ],
   //静态资源服务的文件夹
   publicDir: 'public',
   base: './',
