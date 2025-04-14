@@ -9,36 +9,6 @@ const jwt = require('jsonwebtoken')
 const { success, failure } = require('../../utils/response')
 const { NotFoundError, BadRequestError } = require('../../utils/errors')
 
-/**
- * 公共方法：白名单过滤
- * @param req
- * @returns {{title, content: (string|string|DocumentFragment|*)}}
- */
-function filterBody(req) {
-  return {
-    title: req.body.title,
-    content: req.body.content
-  }
-}
-
-/**
- * 公共方法：查询当前文章
- */
-async function getArticle(req) {
-  // 获取文章 ID
-  const { id } = req.params
-
-  // 查询当前文章
-  const article = await Articles.findByPk(id)
-
-  // 如果没有找到，就抛出异常
-  if (!article) {
-    throw new NotFoundError(`ID: ${id}的文章未找到。`)
-  }
-
-  return article
-}
-
 /* 登录 */
 router.post('/sign_in', async function (req, res, next) {
   try {

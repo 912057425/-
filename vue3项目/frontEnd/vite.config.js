@@ -45,7 +45,7 @@ export default defineConfig({
     // 反向代理 跨域配置
     proxy: {
       '/api': {
-        target: 'https://xxxx.com/',
+        target: 'http://3.129.23.19:3000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
