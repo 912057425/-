@@ -28,6 +28,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import bcrypt from 'bcryptjs'
 
 import { login } from '@/api/login'
 
@@ -48,11 +49,19 @@ const resetForm = (formEl) => {
 // 提交
 const submitForm = async (formEl) => {
   if (!formEl) return
-  await formEl.validate((valid, fields) => {
+  await formEl.validate(async (valid, fields) => {
     if (valid) {
-      login(ruleForm).then((res) => {
-        console.log(res)
-      })
+      console.log(ruleForm.password, 'ruleForm.password')
+
+      // 前端加密密码
+      // const hashedPassword = await bcrypt.hash(ruleForm.password, 10)
+      // let req = {
+      //   username: ruleForm.username,
+      //   password: hashedPassword
+      // }
+      // login(req).then((res) => {
+      //   console.log(res)
+      // })
     } else {
       console.log('error submit!', fields)
     }
