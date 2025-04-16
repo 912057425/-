@@ -28,9 +28,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import bcrypt from 'bcryptjs'
 
-import { login } from '@/api/login'
+import { login, getPublicKey } from '@/api/login'
+import { JSEncrypt } from 'jsencrypt' // 导入 JSEncrypt
 
 let ruleFormRef = ref()
 const ruleForm = reactive({
@@ -51,17 +51,21 @@ const submitForm = async (formEl) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log(ruleForm.password, 'ruleForm.password')
+      getPublicKey().then((res) => {
+        if (res && res.publicKey) {
+          let encryptor = new JSEncrypt() // 新建JSEncrypt对象
+          encryptor.setPublicKey(res.publicKey) // 设置公钥
+          let rsaPassWord = encryptor.encrypt(ruleForm.password) // 对需要加密的数据进行加密
 
-      // 前端加密密码
-      // const hashedPassword = await bcrypt.hash(ruleForm.password, 10)
-      // let req = {
-      //   username: ruleForm.username,
-      //   password: hashedPassword
-      // }
-      // login(req).then((res) => {
-      //   console.log(res)
-      // })
+          let req = {
+            username: ruleForm.username,
+            password: rsaPassWord //前端加密密码
+          }
+          login(req).then((res) => {
+            console.log(res)
+          })
+        }
+      })
     } else {
       console.log('error submit!', fields)
     }

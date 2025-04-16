@@ -1,8 +1,7 @@
 // src/utils/axios.js
 import axios from 'axios'
-
 const axiosInstance = axios.create({
-  baseURL: 'http://3.129.23.19:3000',
+  baseURL: process.env.API_URL,
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
   timeout: 10000 // 超时时间
 })
@@ -24,9 +23,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
-    return response.status === 200
-      ? Promise.reslove(response)
-      : Promise.reject(response)
+    if (response.status === 200) {
+      return Promise.resolve(response.data.data)
+    } else {
+      return Promise.reject(response.data.error)
+    }
   },
   (error) => {
     // 对响应错误做点什么

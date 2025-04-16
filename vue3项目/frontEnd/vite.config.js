@@ -8,6 +8,15 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+  define: {
+    'process.env': {
+      // 根据不同环境设置不同的变量
+      API_URL:
+        process.env.NODE_ENV === 'production'
+          ? 'http://3.129.23.19:3000' //生产环境
+          : 'http://127.0.0.1:3000' //开发环境
+    }
+  },
   plugins: [
     vue(),
     AutoImport({
@@ -45,7 +54,7 @@ export default defineConfig({
     // 反向代理 跨域配置
     proxy: {
       '/api': {
-        target: 'http://3.129.23.19:3000',
+        target: process.env.API_URL,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

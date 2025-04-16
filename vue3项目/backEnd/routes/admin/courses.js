@@ -64,8 +64,6 @@ router.post('/', async function (req, res, next) {
 
     body.userId = req.user.id
 
-    console.log(body, 'body')
-
     let data = await Courses.create(body)
     success(res, '新增课程成功', data)
   } catch (error) {
