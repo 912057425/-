@@ -70,7 +70,14 @@ router.post('/sign_in', async function (req, res, next) {
         }
       )
       success(res, '登录成功', {
-        token
+        token,
+        userInfo: {
+          id: data.id,
+          username: data.username,
+          nickname: data.nickname,
+          email: data.email,
+          role: data.role
+        }
       })
     }
   } catch (error) {

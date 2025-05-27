@@ -6,24 +6,41 @@ import { fileURLToPath, URL } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 
 export default defineConfig({
   define: {
     'process.env': {
       // 根据不同环境设置不同的变量
       API_URL:
-        process.env.NODE_ENV === 'production'
-          ? 'http://3.129.23.19:3000' //生产环境
-          : 'http://127.0.0.1:3000' //开发环境
+        process.env.NODE_ENV === 'development'
+          ? 'http://127.0.0.1:3000' //开发环境
+          : 'http://3.129.23.19:3000' //生产环境
     }
   },
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [
+        ElementPlusResolver(),
+        // 自动导入图标组件
+        IconsResolver({
+          prefix: 'Icon'
+        })
+      ]
     }),
     Components({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [
+        ElementPlusResolver(),
+        // 自动注册图标组件
+        IconsResolver({
+          enabledCollections: ['ep']
+        })
+      ]
+    }),
+    Icons({
+      autoInstall: true
     })
   ],
   //静态资源服务的文件夹

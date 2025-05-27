@@ -32,10 +32,19 @@ import { ref, reactive } from 'vue'
 import { login, getPublicKey } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt' // 导入 JSEncrypt
 
+// 引入pinia
+import { useAuthStore } from '@/stores/modules/authStore.js'
+const getAuthStore = useAuthStore()
+const { setToken } = getAuthStore
+
+// 引入路由
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 let ruleFormRef = ref()
 const ruleForm = reactive({
-  username: '',
-  password: ''
+  username: '912057425@qq.com',
+  password: 'yangfeng123.'
 })
 const rules = reactive({
   username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
@@ -61,9 +70,25 @@ const submitForm = async (formEl) => {
             username: ruleForm.username,
             password: rsaPassWord //前端加密密码
           }
-          login(req).then((res) => {
-            console.log(res)
-          })
+          login(req)
+            .then((res) => {
+              if (res && res.token) {
+                // 保存token
+                setToken({
+                  token: res.token,
+                  userInfo: res.userInfo
+                })
+                // 跳转到首页
+                router.push('/')
+              }
+            })
+            .catch((err) => {
+              ElNotification({
+                title: 'Warning',
+                message: err.message,
+                type: 'warning'
+              })
+            })
         }
       })
     } else {

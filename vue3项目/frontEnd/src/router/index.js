@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Home from '../views/home/index.vue'
-import Login from '../views/login/index.vue'
-import { useAuthStore } from '../stores/modules/authStore.js'
+import Home from '@/views/home/index.vue'
+import Login from '@/views/login/index.vue'
+import { useAuthStore } from '@/stores/modules/authStore.js'
 
 const routes = [
   {

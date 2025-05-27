@@ -16,3 +16,11 @@ export function login(data) {
     data
   })
 }
+
+//获取个人信息
+export function getPersonInfo(id) {
+  return xhr({
+    url: `/admin/users/${id}`,
+    method: 'get'
+  })
+}
