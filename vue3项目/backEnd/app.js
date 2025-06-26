@@ -41,6 +41,6 @@ app.use('/admin/chapters', adminAuth, chaptersRouter)
 app.use('/admin/auth', authRouter)
 
 //前台
-app.use('/', index)
+app.use('/app', index)
 
 module.exports = app
