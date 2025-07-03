@@ -41,6 +41,28 @@ module.exports = function (sequelize, DataTypes) {
             }
           }
         }
+      },
+      internal_name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true, // 数据库层面的唯一约束
+        validate: {
+          notNull: { msg: '内部名称必须填写。' },
+          notEmpty: { msg: '内部名称不能为空。' },
+          len: { args: [2, 45], msg: '内部名称长度必须是2~45个字符。' },
+          is: {
+            args: /^[a-z0-9_]+$/i, // 仅允许字母、数字和下划线
+            msg: '内部名称只能包含字母、数字和下划线。'
+          },
+          async isUnique(value) {
+            const category = await sequelize.models.Categories.findOne({
+              where: { internal_name: value }
+            })
+            if (category) {
+              throw new Error('内部名称已存在，请选择其他名称。')
+            }
+          }
+        }
       }
     },
     {

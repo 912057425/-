@@ -37,7 +37,9 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -55,14 +57,9 @@ import { useAuthStore } from '@/stores/modules/authStore.js'
 const { setToken } = useAuthStore()
 
 // 组件
-import PersonInfo from './components/PersonInfo.vue'
+import PersonInfo from '@/views/personInfo/index.vue'
 
 import { getMenuList } from '@/api/menu'
-
-// 生命周期 -----------------
-onMounted(() => {
-  getMenu()
-})
 
 // heard -----------------
 const headerState = reactive({
@@ -97,19 +94,24 @@ const logout = () => {
 // 左侧菜单 -----------------
 const menuState = reactive({
   defaultActive: '',
-  refreshKey: false,
   allMenu: [] // 左侧菜单数据
 })
-const { allMenu, defaultActive, refreshKey } = toRefs(menuState)
+const { allMenu, defaultActive } = toRefs(menuState)
 
 //获取左侧菜单
 const getMenu = async () => {
   const res = await getMenuList()
-  if (res && res.data.length > 0) {
+  if (res && res.data) {
     allMenu.value = res.data
     defaultActive.value = res.data[0].id
+    // 路由跳转
+    router.push({
+      path: res.data[0].internal_name,
+      query: { id: res.data[0].id }
+    })
   }
 }
+getMenu()
 </script>
 
 <style lang="less" scoped>

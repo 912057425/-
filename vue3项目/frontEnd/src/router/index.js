@@ -21,7 +21,14 @@ const routes = [
         next('/login')
       }
       next()
-    }
+    },
+    children: [
+      {
+        path: '/frontEndDevelopment', // 前端开发
+        name: 'frontEndDevelopment',
+        component: () => import('@/views/frontEndDevelopment/index.vue')
+      }
+    ]
   }
 ]
 

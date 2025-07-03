@@ -47,7 +47,7 @@ module.exports = function (sequelize, DataTypes) {
         }
       },
       image: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.TEXT,
         allowNull: true
       },
       recommended: {
@@ -72,7 +72,7 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
-      content: {
+      description: {
         type: DataTypes.TEXT,
         allowNull: true
       },

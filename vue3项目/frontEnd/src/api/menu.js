@@ -18,3 +18,14 @@ export function getCategoryCourses(id) {
     }
   })
 }
+
+//获取单个课程下的章节
+export function getCourseChapters(id) {
+  return xhr({
+    url: `/admin/chapters`,
+    method: 'get',
+    params: {
+      courseId: id
+    }
+  })
+}
